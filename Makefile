@@ -12,12 +12,12 @@ MKDIR?=mkdir
 all: $(LIB)
 
 obj/%.o : src/%.c
-	$(MKDIR) -p obj
+	@$(MKDIR) -p obj
 	$(CC) $< -o $@ $(CFLAGS)
 
 
 $(LIB): $(OBJ)
-	$(MKDIR) -p lib
+	@$(MKDIR) -p lib
 	$(RM) $@
 	$(AR) cq $@ $^
 
