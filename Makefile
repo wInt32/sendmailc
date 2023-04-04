@@ -4,6 +4,8 @@ LIB=lib/libsendmail.a
 CFLAGS:=-Iinclude -c $(CFLAGS)
 CC?=gcc
 AR?=ar
+CC:=$(TOOLCHAIN_PREFIX)$(CC)
+AR:=$(TOOLCHAIN_PREFIX)$(AR)
 RM?=rm
 MKDIR?=mkdir
 
