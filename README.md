@@ -1,12 +1,9 @@
 # sendmailc
 Send SMTP mail/authenticate to google with C
 
-## Functions
-- `google_get_oauth2_authorization_code()`
-- `google_get_oauth2_access_token()`
-- `google_get_oauth2_refresh_token()`
-- `smtp_auth_oauth2()`
-- `smtp_send_mail()`
+## Building
+It's pretty simple, just run `make` and you'll get `libsendmail.a` in the `lib` folder.
+In your program you should `#include <sendmail.h>` and link to `-lsendmail`.
 
 ## Example code
 ```c
