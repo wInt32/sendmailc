@@ -3,7 +3,7 @@ Send SMTP mail/authenticate to google with C
 
 ## Building
 It's pretty simple, just run `make` and you'll get `libsendmail.a` in the `lib` folder.
-In your program you should `#include <sendmail.h>` and link to `-lsendmail`.
+In your program you should `#include <sendmail.h>` and link to `-lsendmail` and `-lmicrohttpd`.
 
 ## Example code
 ```c

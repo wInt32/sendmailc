@@ -239,5 +239,10 @@ int smtp_send_mail(void *curl, const char *url, const char *sender_email_addr, v
     curl_easy_setopt(curl, CURLOPT_READDATA, &up);
     curl_easy_setopt(curl, CURLOPT_READFUNCTION, int32_cgmail_read_callback);
     curl_easy_setopt(curl, CURLOPT_UPLOAD, 1);
-    curl_easy_perform(curl);
+
+    int res = curl_easy_perform(curl);
+    if (res == CURLE_OK)
+        return 1;
+    
+    return 0;
 }
