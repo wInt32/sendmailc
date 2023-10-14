@@ -24,3 +24,4 @@ In your program you should `#include <sendmail.h>` and link to `-lsendmailc -lcu
 - [ ] Other SMTP servers
 - [ ] Custom OAUTH2
 - [ ] Other authentication schemes
+
