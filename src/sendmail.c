@@ -232,7 +232,10 @@ int sendmailc_google_auth(sendmailc_t *sendmailc, sendmailc_google_oauth2_t *aut
     }
 
     smtp_auth:
-    sendmailc->smtp_server_url = "smtps://smtp.gmail.com";
+    char *gmail_smtp_url = "smtps://smtp.gmail.com";
+    size_t url_len = strlen(gmail_smtp_url);
+    sendmailc->smtp_server_url = calloc(url_len+1, 1);
+    strcpy(sendmailc->smtp_server_url, gmail_smtp_url);
     int address_len = strlen(auth->user_email_address);
     sendmailc->smtp_username = calloc(address_len+1, 1);
     memcpy(sendmailc->smtp_username, auth->user_email_address, address_len);
@@ -270,19 +273,18 @@ sendmailc_email_t *sendmailc_email_new(sendmailc_t *sendmailc) {
         return NULL;
     email->to=NULL;
     email->headers=NULL;
-    size_t name_len = strlen(sendmailc->smtp_username);
-    email->from = malloc(name_len+1);
-    if (email->from == NULL) {
-        free(email);
-        return NULL;
+    email->from=NULL;
+    if (sendmailc->smtp_username != NULL) {
+        size_t name_len = strlen(sendmailc->smtp_username);
+        email->from = malloc(name_len+1);
+        if (email->from == NULL) {
+            free(email);
+            return NULL;
+        }
+        strcpy(email->from, sendmailc->smtp_username);
     }
-    strcpy(email->from, sendmailc->smtp_username);
-    email->body=calloc(1, 1);
-    if (email->body == NULL) {
-        free(email->from);
-        free(email);
-        return NULL;
-    }
+    
+    email->body=NULL;
 }
 
 /* add recipient*/
@@ -399,7 +401,7 @@ int sendmailc_send_email(sendmailc_t *sendmailc, sendmailc_email_t *email) {
 
     struct upload_data upload_data = {0};
     upload_data.buffer = malloc(sizeof(sendmailc_buffer_t));
-    if (upload_data.buffer = NULL) {
+    if (upload_data.buffer == NULL) {
         free(to_buffer);
         free(header_buffer);
         return SENDMAILC_ERROR;
