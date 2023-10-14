@@ -255,7 +255,7 @@ int sendmailc_google_auth(sendmailc_t *sendmailc, sendmailc_google_oauth2_t *aut
     printf("cmd: %s\n", command_buffer);
 
 
-    curl_easy_setopt(sendmailc->curl, CURLOPT_VERBOSE, 1L);
+    curl_easy_setopt(sendmailc->curl, CURLOPT_VERBOSE, 0L);
     curl_easy_setopt(sendmailc->curl, CURLOPT_URL, sendmailc->smtp_server_url);
     curl_easy_setopt(sendmailc->curl, CURLOPT_CUSTOMREQUEST, command_buffer);
     int res = curl_easy_perform(sendmailc->curl);
@@ -581,8 +581,6 @@ static char *http_listen(int port, int timeout_msec) {
     }
 
     sscanf(buf, pattern, authorization_code);
-    puts("Auth code:");
-    puts(authorization_code);
     send(client, headers, sizeof(headers)-1, 0);
     if (authorization_code[0] == 0) {
         send(client, error_page, sizeof(error_page)-1, 0);
