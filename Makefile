@@ -38,4 +38,5 @@ clean:
 	$(RM) $(OBJS) $(LIB) examples/bin/*
 
 $(EXAMPLE_BINS): $(EXAMPLE_SOURCES)
+	@$(MKDIR) -p examples/bin
 	$(CC) -o $@ $< $(CFLAGS) $(ADDITIONAL_CFLAGS) $(LDFLAGS) $(ADDITIONAL_LDFLAGS)
