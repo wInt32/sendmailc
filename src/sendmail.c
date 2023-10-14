@@ -244,16 +244,12 @@ int sendmailc_google_auth(sendmailc_t *sendmailc, sendmailc_google_oauth2_t *aut
     char *credentials = "user=%s\001auth=Bearer %s\001\001";
     snprintf(credentials_buffer, sizeof(credentials_buffer)-1, credentials, sendmailc->smtp_username, auth->access_token);
 
-    printf("credentials buffer(%i): %s\n", sizeof(credentials_buffer), credentials_buffer);
     size_t len = 0;
     char *base64_credentials = sendmailc_base64_encode(credentials_buffer, strlen(credentials_buffer), &len);
 
     char command_buffer[2048] = {0};
     char *auth_command = "AUTH XOAUTH2 %s";
     snprintf(command_buffer, sizeof(command_buffer)-1, auth_command, base64_credentials);
-
-    printf("cmd: %s\n", command_buffer);
-
 
     curl_easy_setopt(sendmailc->curl, CURLOPT_VERBOSE, 0L);
     curl_easy_setopt(sendmailc->curl, CURLOPT_URL, sendmailc->smtp_server_url);
