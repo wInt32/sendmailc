@@ -1,3 +1,7 @@
 *.o
 *.a
 .vscode/*
+examples/credentials.h
+examples/bin/*
+obj/*
+lib/*

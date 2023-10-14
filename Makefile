@@ -1,27 +1,41 @@
-SOURCES=src/cJSON.c src/sendmail.c
-OBJ=obj/cJSON.o obj/sendmail.o
-LIB=lib/libsendmail.a
-CFLAGS:=-Iinclude -c $(CFLAGS)
-CC?=gcc
-AR?=ar
-CC:=$(CROSS_COMPILE)$(CC)
-AR:=$(CROSS_COMPILE)$(AR)
 RM?=rm
 MKDIR?=mkdir
+AR?=ar
+
+TARGET?=linux
+
+BASENAMES=cJSON sendmail
+SOURCES=$(addprefix src/,$(addsuffix .c,$(BASENAMES)))
+OBJS=$(addprefix obj/,$(addsuffix .o,$(BASENAMES)))
+
+LIB=lib/libsendmailc.a
+EXAMPLE_SOURCES=examples/hello.c
+BIN_SUFFIX=""
+EXAMPLE_BINS:=examples/bin/hello$(BIN_SUFFIX)
+LDFLAGS=-Llib -lsendmailc -lcurl
+CFLAGS=-Iinclude -fPIC
+CC:=$(CROSS_COMPILE)$(CC)
+AR:=$(CROSS_COMPILE)$(AR)
 
 .PHONY: clean
 
-all: $(LIB)
+all: lib examples
 
-obj/%.o : src/%.c
+lib: $(LIB)
+
+examples: $(LIB) $(EXAMPLE_BINS)
+
+obj/%.o: src/%.c
 	@$(MKDIR) -p obj
-	$(CC) $< -o $@ $(CFLAGS)
+	$(CC) $< -o $@ -c $(CFLAGS) $(ADDITIONAL_CFLAGS)
 
-
-$(LIB): $(OBJ)
+$(LIB): $(OBJS)
 	@$(MKDIR) -p lib
 	$(RM) $@
 	$(AR) cq $@ $^
 
 clean:
-	$(RM) $(OBJ) $(LIB)
+	$(RM) $(OBJS) $(LIB) examples/bin/*
+
+$(EXAMPLE_BINS): $(EXAMPLE_SOURCES)
+	$(CC) -o $@ $< $(CFLAGS) $(ADDITIONAL_CFLAGS) $(LDFLAGS) $(ADDITIONAL_LDFLAGS)
